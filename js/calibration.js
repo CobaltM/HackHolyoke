@@ -57,16 +57,18 @@ $(document).ready(function(){
         redraw();
       }
       });
-      function drawOnLife(x,y){
+      function drawOnLife(){
         
         if(paint){
-          console.log(x, y, true)
-          addClick(x, y, true);
+          console.log(currentX, currentY, true)
+          addClick(currentX, currentY, true);
           redraw();
         }
+        setTimeout(drawOnLife,10)
       }
+      drawOnLife();
       
-      setInterval(function(){drawOnLife(currentX,currentY);},10);
+      //setInterval(function(){drawOnLife(currentX,currentY);},10);
       
       /*$('#plotting_canvas').mousemove(function(e){
         if(paint){
@@ -115,26 +117,7 @@ $(document).ready(function(){
      
 });
 
-/**
- * Show the Calibration Points
- */
-function ShowCalibrationPoint() {
-  $(".Calibration").show();
-  $("#Pt5").hide(); // initially hides the middle button
-}
 
-/**
-* This function clears the calibration buttons memory
-*/
-function ClearCalibration(){
-  window.localStorage.clear();
-  $(".Calibration").css('background-color','red');
-  $(".Calibration").css('opacity',0.2);
-  $(".Calibration").prop('disabled',false);
-
-  CalibrationPoints = {};
-  PointCalibrate = 0;
-}
 
 // sleep function because java doesn't have one, sourced from http://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep
 function sleep (time) {
