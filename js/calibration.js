@@ -42,6 +42,76 @@ function helpModalShow() {
 $(document).ready(function(){
   ClearCanvas();
   helpModalShow();
+
+      var canvas = document.getElementById("plotting_canvas");
+      var context =  canvas.getContext("2d");
+      console.log("help");
+      $(document).keydown(function(e){
+        if(e.keyCode == 32){
+        console.log("me");
+        var mouseX = e.pageX - this.offsetLeft;
+        var mouseY = e.pageY - this.offsetTop;
+              
+        paint = true;
+        addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
+        redraw();
+      }
+      });
+      function drawOnLife(x,y){
+        
+        if(paint){
+          console.log(x, y, true)
+          addClick(x, y, true);
+          redraw();
+        }
+      }
+      
+      setInterval(function(){drawOnLife(currentX,currentY);},100);
+      
+      /*$('#plotting_canvas').mousemove(function(e){
+        if(paint){
+          addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
+          redraw();
+        }
+      });*/
+      
+      
+  
+      $(document).keyup(function(e){
+        if(e.keyCode == 32){
+          paint = false;
+        }
+      });
+      var clickX = new Array();
+      var clickY = new Array();
+      var clickDrag = new Array();
+      var paint;
+
+      function addClick(x, y, dragging)
+      {
+        clickX.push(x);
+        clickY.push(y);
+        clickDrag.push(dragging);
+      }
+      function redraw(){
+        context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
+        
+        context.strokeStyle = "#df4b26";
+        context.lineJoin = "round";
+        context.lineWidth = 5;
+                  
+        for(var i=0; i < clickX.length; i++) {        
+          context.beginPath();
+          if(clickDrag[i] && i){
+            context.moveTo(clickX[i-1], clickY[i-1]);
+           }else{
+             context.moveTo(clickX[i]-1, clickY[i]);
+           }
+           context.lineTo(clickX[i], clickY[i]);
+           context.closePath();
+           context.stroke();
+        }
+      }
      $(".Calibration").click(function(){ // click event on the calibration buttons
 
       var id = $(this).attr('id');
@@ -65,6 +135,7 @@ $(document).ready(function(){
       if (PointCalibrate == 8){
         $("#Pt5").show();
       }
+     
 
       if (PointCalibrate >= 9){ // last point is calibrated
             //using jquery to grab every element in Calibration class and hide them except the middle point.
